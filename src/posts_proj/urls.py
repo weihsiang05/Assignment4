@@ -21,6 +21,9 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # Put blank in the '' since the posts application be consist as the main page.
+    #namespace value should be equal to the app_name in the posts/urls.py
+    path('', include('posts.urls', namespace='posts')),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+<!--Load the static folder-->
+{% load static %}
+
+{% block scripts %}
+  <!-- defer won't execute until the page load -->
+  <script src="{% static "posts/main.js" %}" defer></script>
+{% endblock scripts %}
+
+{% block titile %}
+posts
+{% endblock titile %}
+
+{% block content %}
+<!--qs was defined in the views.py-->
+{% for obj in qs %}
+  {{obj.title}} - {{obj.body}} <br>
+{% endfor %}
+{% endblock content %}
