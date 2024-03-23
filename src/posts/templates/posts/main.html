@@ -12,8 +12,9 @@ posts
 {% endblock titile %}
 
 {% block content %}
-<!--qs was defined in the views.py-->
-{% for obj in qs %}
-  {{obj.title}} - {{obj.body}} <br>
-{% endfor %}
+  <!--qs was defined in the views.py-->
+  {% for obj in qs %}
+    {{obj.title}} - {{obj.body}} <br>
+  {% endfor %}
+  <div id="hello-world"></div>
 {% endblock content %}
