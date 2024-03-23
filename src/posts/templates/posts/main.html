@@ -13,8 +13,12 @@ posts
 
 {% block content %}
   <!--qs was defined in the views.py-->
-  {% for obj in qs %}
+  {% comment %} {% for obj in qs %}
     {{obj.title}} - {{obj.body}} <br>
-  {% endfor %}
+  {% endfor %} {% endcomment %}
+  <div id="spinner-box" class="text-center">
+    <div class="spinner-border" role="status"></div>
+  </div>
+  <div id="posts-box" ></div>  
   <div id="hello-world"></div>
 {% endblock content %}
