@@ -9,7 +9,12 @@ def post_list_and_create(request):
   # We will use the key ('qs') in the template
   return render(request, 'posts/main.html', {'qs':qs}) 
 
-def load_post_data_view(request):
+def load_post_data_view(request, num_posts):
+  visible = 3
+  upper = num_posts
+  lower = upper - visible
+  size = Post.objects.all().count()
+
   # Get all of the data from the database
   qs = Post.objects.all() 
   data = []
@@ -18,10 +23,29 @@ def load_post_data_view(request):
       'id': obj.id,
       'title': obj.title,
       'body': obj.body,
+      'liked': True if request.user in obj.liked.all() else False,
+      'count': obj.like_count,
       'author': obj.author.user.username
     }
     data.append(item)
-  return JsonResponse({'data': data})
+  return JsonResponse({'data': data[lower:upper], 'size': size})
+
+def like_unlike_post(request):
+  # Check if the request is an AJAX request
+  if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+    # Get the pk form the main.js likeUnlikePosts
+    pk = request.POST.get('pk')
+    obj = Post.objects.get(pk=pk)
+    # If the user is on that like list particular of the post
+    if request.user in obj.liked.all():
+      # it means that the user have already like the post
+      liked = False
+      # Remove the user from the like list
+      obj.liked.remove(request.user)
+    else:
+      liked = True
+      obj.liked.add(request.user)
+    return JsonResponse({'like': liked, 'count': obj.like_count})
 
 def hello_world_view(request):
   return JsonResponse({'text': 'hello world'})
