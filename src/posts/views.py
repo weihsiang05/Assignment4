@@ -33,6 +33,17 @@ def post_list_and_create(request):
   # We will use the key ('qs') in the template
   return render(request, 'posts/main.html', context) 
 
+def post_detail(request, pk):
+  obj = Post.objects.get(pk=pk)
+  form = PostForm()
+
+  context = {
+    'obj': obj,
+    'form': form
+  }
+
+  return render(request, 'posts/detail.html', context)
+
 def load_post_data_view(request, num_posts):
   if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
     visible = 3
@@ -54,6 +65,17 @@ def load_post_data_view(request, num_posts):
       }
       data.append(item)
     return JsonResponse({'data': data[lower:upper], 'size': size})
+  
+def post_detail_data_view(request, pk):
+  obj = Post.objects.get(pk=pk)
+  data={
+    'id': obj.id,
+    'title': obj.title,
+    'body': obj.body,
+    'author': obj.author.user.username,
+    'logged_in': request.user.username,
+  }
+  return JsonResponse({'data': data})
 
 def like_unlike_post(request):
   # Check if the request is an AJAX request
@@ -72,5 +94,23 @@ def like_unlike_post(request):
       obj.liked.add(request.user)
     return JsonResponse({'like': liked, 'count': obj.like_count})
 
-def hello_world_view(request):
-  return JsonResponse({'text': 'hello world'})
+def update_post(request, pk):
+  obj = Post.objects.get(pk=pk)
+  # Check if the request is an AJAX request
+  if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+    new_title = request.POST.get('title')
+    new_body = request.POST.get('body')
+    obj.title = new_title
+    obj.body = new_body
+    obj.save()
+    return JsonResponse({
+      'title': new_title,
+      'body': new_body,
+    })
+
+def delete_post(request, pk):
+  obj = Post.objects.get(pk=pk)
+  # Check if the request is an AJAX request
+  if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+    obj.delete()
+    return JsonResponse({})
