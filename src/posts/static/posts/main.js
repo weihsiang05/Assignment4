@@ -32,6 +32,12 @@ const getCookie = (name) => {
 }
 const csrftoken = getCookie('csrftoken');
 
+const deleted = localStorage.getItem('title')
+if (deleted) {
+  handleAlerts('danger', `deleted "${deleted}`)
+  localStorage.clear()
+}
+
 const likeUnlikePosts = () => {
   //... spreads out the elements of the HTMLCollection into a new array, effectively converting the HTMLCollection into an array of elements.
   const likeUnlikeForms = [...document.getElementsByClassName('like-unlike-forms')]
