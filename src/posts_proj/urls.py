@@ -24,6 +24,7 @@ urlpatterns = [
     # Put blank in the '' since the posts application be consist as the main page.
     #namespace value should be equal to the app_name in the posts/urls.py
     path('', include('posts.urls', namespace='posts')),
+    path('profiles/', include('profiles.urls', namespace='profiles')),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
