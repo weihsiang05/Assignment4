@@ -28,8 +28,8 @@ posts
             {% comment %} <span aria-hidden="true">&times;</span> {% endcomment %}
           </button>
         </div>
-        <div class="modal-body">
-          <form id="post-form">
+        <div class="modal-body">  
+          <form id="post-form" autocomplete="off">
             {% csrf_token %}
             {{form.as_p}}
             <div class="modal-footer">
